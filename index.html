@@ -5,151 +5,175 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Jonghwa Park — vision-language models, multimodal representation learning, and whether model confidence survives compression. B.S. candidate, Hansung University.">
 <title>Jonghwa Park</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <style>
 :root{
-  --paper:#fbfaf8; --card:#ffffff; --line:#e3e0da; --line-soft:#eeece7;
-  --ink:#14171c; --body:#3a4048; --muted:#6b7280; --faint:#9aa1ab;
-  --accent:#2f4a7a; --tag:#f1efea;
+  --paper:#ffffff; --card:#ffffff; --line:#e5e7eb; --line-soft:#f1f2f4;
+  --ink:#0f1419; --body:#3d4550; --muted:#6b7280; --faint:#9ba2ac;
+  --accent:#1e4fa3; --tag:#f5f6f8;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --paper:#111317; --card:#171a1f; --line:#2a2e36; --line-soft:#22262d;
-    --ink:#f0f1f3; --body:#bcc2cb; --muted:#8c939d; --faint:#6b7280;
-    --accent:#8fa8d8; --tag:#1e222a;
+    --paper:#0d1117; --card:#131820; --line:#252c36; --line-soft:#1b212a;
+    --ink:#eceef1; --body:#b4bbc5; --muted:#868e99; --faint:#69717c;
+    --accent:#7ba3e8; --tag:#181d25;
   }
 }
 :root[data-theme="dark"]{
-  --paper:#111317; --card:#171a1f; --line:#2a2e36; --line-soft:#22262d;
-  --ink:#f0f1f3; --body:#bcc2cb; --muted:#8c939d; --faint:#6b7280;
-  --accent:#8fa8d8; --tag:#1e222a;
+  --paper:#0d1117; --card:#131820; --line:#252c36; --line-soft:#1b212a;
+  --ink:#eceef1; --body:#b4bbc5; --muted:#868e99; --faint:#69717c;
+  --accent:#7ba3e8; --tag:#181d25;
 }
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{
   margin:0; background:var(--paper); color:var(--body);
-  font-family:"Inter",-apple-system,system-ui,sans-serif;
-  font-size:15px; line-height:1.72; -webkit-font-smoothing:antialiased;
+  font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  font-size:15.5px; line-height:1.75; -webkit-font-smoothing:antialiased;
 }
-a{color:var(--accent); text-decoration:none; border-bottom:1px solid transparent}
-a:hover{border-bottom-color:var(--accent)}
-.wrap{max-width:760px; margin:0 auto; padding:64px 24px 96px}
+a{color:var(--accent); text-decoration:none}
+a:hover{text-decoration:underline; text-underline-offset:3px}
+.wrap{max-width:720px; margin:0 auto; padding:72px 24px 96px}
 
-/* header */
-header{display:flex; gap:26px; align-items:flex-start; flex-wrap:wrap; margin-bottom:14px}
-.hgrow{flex:1 1 320px; min-width:0}
-h1{
-  font-family:"Newsreader",Georgia,serif; font-weight:600; font-size:38px;
-  color:var(--ink); margin:0; letter-spacing:-.015em; line-height:1.1;
+/* ── hero ───────────────────────────── */
+.hero{text-align:center; margin-bottom:44px}
+.hero h1{
+  font-size:33px; font-weight:700; color:var(--ink);
+  margin:0 0 22px; letter-spacing:-.02em; line-height:1.2;
 }
-.hangul{font-size:17px; color:var(--faint); font-weight:400; margin-left:10px; letter-spacing:0}
-.role{margin:10px 0 0; color:var(--muted); font-size:14.5px}
-.meta{margin:14px 0 0; font-size:13.5px; color:var(--muted); display:flex; flex-wrap:wrap; gap:6px 16px}
+.hangul{font-size:16px; color:var(--faint); font-weight:400; margin-left:9px; letter-spacing:0}
 .avatar{
-  width:112px; height:112px; border-radius:3px; flex:none;
-  background:var(--tag); border:1px solid var(--line);
-  display:flex; align-items:center; justify-content:center;
-  font-family:"Newsreader",serif; font-size:34px; color:var(--faint);
-  object-fit:cover;
+  width:136px; height:136px; border-radius:50%; object-fit:cover;
+  display:block; margin:0 auto; background:var(--tag);
+  border:1px solid var(--line); overflow:hidden;
+}
+.role{margin:20px 0 0; color:var(--muted); font-size:14.5px; line-height:1.6}
+.meta{
+  margin:16px 0 0; font-size:14px; display:flex; flex-wrap:wrap;
+  justify-content:center; gap:6px 0;
+}
+.meta span{display:inline-flex; align-items:center}
+.meta span:not(:last-child):after{
+  content:"·"; color:var(--faint); margin:0 12px;
 }
 
-.lede{
-  margin:26px 0 0; padding:18px 20px; background:var(--card);
-  border:1px solid var(--line); border-radius:3px;
-  font-size:15px; color:var(--body);
+/* ── toc ────────────────────────────── */
+.toc{
+  display:flex; flex-wrap:wrap; justify-content:center; gap:6px 0;
+  padding:15px 18px; margin-bottom:8px;
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  font-size:13px;
 }
-.lede b{color:var(--ink); font-weight:600}
+.toc a{color:var(--muted)}
+.toc a:hover{color:var(--accent)}
+.toc a:not(:last-child):after{content:"·"; color:var(--faint); margin:0 10px; text-decoration:none; display:inline-block}
 
-/* sections */
-section{margin-top:52px}
+/* ── sections ───────────────────────── */
+section{margin-top:52px; scroll-margin-top:24px}
 h2{
-  font-family:"Inter",sans-serif; font-size:11.5px; font-weight:600;
-  letter-spacing:.14em; text-transform:uppercase; color:var(--muted);
-  margin:0 0 18px; padding-bottom:9px; border-bottom:1px solid var(--line);
+  font-size:19px; font-weight:600; color:var(--ink);
+  margin:0 0 20px; padding-bottom:11px; border-bottom:1px solid var(--line);
+  letter-spacing:-.01em;
 }
-h3{font-family:"Inter",sans-serif; font-size:15.5px; font-weight:600; color:var(--ink); margin:0}
+h3{font-size:15.5px; font-weight:600; color:var(--ink); margin:0}
 
-/* entries */
-.entry{margin-bottom:22px}
+/* ── entries ────────────────────────── */
+.entry{margin-bottom:24px}
 .entry:last-child{margin-bottom:0}
 .erow{display:flex; justify-content:space-between; align-items:baseline; gap:16px}
-.date{font-size:12.5px; color:var(--faint); white-space:nowrap; font-variant-numeric:tabular-nums}
-.sub{margin:3px 0 0; font-size:13.5px; color:var(--muted)}
-.entry p{margin:8px 0 0; font-size:14.5px}
+.date{font-size:13px; color:var(--faint); white-space:nowrap; font-variant-numeric:tabular-nums}
+.sub{margin:4px 0 0; font-size:14px; color:var(--muted)}
+.entry p{margin:9px 0 0; font-size:14.5px}
 
-/* publications */
-.pubgroup{margin-bottom:24px}
+/* ── publications ───────────────────── */
+.pubgroup{margin-bottom:26px}
 .pubgroup:last-child{margin-bottom:0}
 .plabel{
-  font-size:11px; letter-spacing:.1em; text-transform:uppercase;
-  color:var(--faint); font-weight:600; margin-bottom:10px;
+  font-size:11.5px; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--faint); font-weight:600; margin-bottom:11px;
 }
-.pub{display:flex; gap:12px; margin-bottom:13px; font-size:14px; line-height:1.65}
+.pub{display:flex; gap:12px; margin-bottom:14px; font-size:14.5px; line-height:1.68}
 .pub:last-child{margin-bottom:0}
 .pn{color:var(--faint); flex:none; font-variant-numeric:tabular-nums; font-size:13px; padding-top:1px}
 .pub em{font-style:italic; color:var(--body)}
 .pub .me{font-weight:600; color:var(--ink)}
 .pub .venue{font-style:italic}
 
-/* research cards */
+/* ── research cards ─────────────────── */
 .card{
-  padding:20px; background:var(--card); border:1px solid var(--line);
-  border-radius:3px; margin-bottom:14px;
+  padding:22px 24px; background:var(--card); border:1px solid var(--line);
+  border-radius:8px; margin-bottom:16px;
 }
 .card:last-child{margin-bottom:0}
-.card h3{margin-bottom:4px}
-.card .kind{font-size:12px; color:var(--faint); letter-spacing:.06em; text-transform:uppercase; font-weight:600}
-.card p{margin:10px 0 0; font-size:14.5px}
+.card h3{margin-bottom:5px}
+.card .kind{
+  font-size:11.5px; color:var(--faint); letter-spacing:.07em;
+  text-transform:uppercase; font-weight:600;
+}
+.card p{margin:11px 0 0; font-size:14.5px}
 .card .learn{
-  margin-top:12px; padding-top:12px; border-top:1px dashed var(--line);
-  font-size:13.5px; color:var(--muted);
+  margin-top:14px; padding-top:14px; border-top:1px solid var(--line-soft);
+  font-size:14px; color:var(--muted);
 }
 .card .learn b{color:var(--accent); font-weight:600}
 
-/* skills */
+/* ── skills / lists ─────────────────── */
 .skills dt{
-  font-size:12px; letter-spacing:.08em; text-transform:uppercase;
-  color:var(--muted); font-weight:600; margin-top:14px;
+  font-size:12px; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--muted); font-weight:600; margin-top:16px;
 }
 .skills dt:first-child{margin-top:0}
-.skills dd{margin:5px 0 0; font-size:14px; color:var(--body)}
-
+.skills dd{margin:6px 0 0; font-size:14.5px; color:var(--body)}
 ul.plain{list-style:none; padding:0; margin:0}
-ul.plain li{
-  padding-left:16px; position:relative; margin-bottom:8px; font-size:14.5px;
-}
+ul.plain li{padding-left:17px; position:relative; margin-bottom:9px; font-size:14.5px}
 ul.plain li:before{
-  content:""; position:absolute; left:0; top:.72em;
-  width:5px; height:1px; background:var(--faint);
+  content:""; position:absolute; left:0; top:.75em;
+  width:6px; height:1px; background:var(--faint);
 }
+
+/* ── intro ──────────────────────────── */
+.lede{margin:0; font-size:15.5px; color:var(--body); line-height:1.78}
+.lede b{color:var(--ink); font-weight:600}
 
 footer{
-  margin-top:64px; padding-top:20px; border-top:1px solid var(--line);
-  font-size:12.5px; color:var(--faint); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  margin-top:64px; padding-top:22px; border-top:1px solid var(--line);
+  font-size:13px; color:var(--faint);
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+}
+
+@media (max-width:600px){
+  .wrap{padding:48px 20px 72px}
+  .hero h1{font-size:28px}
+  .avatar{width:118px; height:118px}
+  .erow{flex-direction:column; gap:2px}
+  .card{padding:18px 18px}
 }
 </style>
 </head>
 <body>
-
-
 <div class="wrap">
 
-<header>
-  <div class="hgrow">
-    <h1>Jonghwa Park<span class="hangul">박종화</span></h1>
-    <p class="role">B.S. Candidate, Industrial and Systems Engineering &middot; Hansung University, Seoul</p>
-    <div class="meta">
-      <span><a href="mailto:jong8620@hansung.ac.kr">jong8620@hansung.ac.kr</a></span>
-      <span><a href="Jonghwa_Park_CV.pdf">CV (PDF)</a></span>
-      <span><a href="https://github.com/jonghwa-8620">GitHub</a></span>
-      <span><a href="https://orcid.org/0009-0007-2050-9401">ORCID</a></span>
-      <!-- Scholar는 논문 게재 후 -->
-      <!-- <span><a href="https://scholar.google.com/citations?user=XXXX">Google Scholar</a></span> -->
-    </div>
-  </div>
+<header class="hero">
+  <h1>Jonghwa Park<span class="hangul">박종화</span></h1>
   <img class="avatar" src="증명사진.jpg" alt="Jonghwa Park">
+  <p class="role">B.S. Candidate, Industrial and Systems Engineering<br>Hansung University, Seoul</p>
+  <div class="meta">
+    <span><a href="mailto:jong8620@hansung.ac.kr">Email</a></span>
+    <span><a href="Jonghwa_Park_CV.pdf">CV</a></span>
+    <span><a href="https://github.com/jonghwa-8620">GitHub</a></span>
+    <span><a href="https://orcid.org/0009-0007-2050-9401">ORCID</a></span>
+  </div>
 </header>
 
-<div class="lede">
+<nav class="toc">
+  <a href="#intro">Introduction</a><a href="#education">Education</a><a href="#experience">Experience</a><a href="#publications">Publications</a><a href="#research">Research</a><a href="#skills">Skills</a><a href="#awards">Awards</a>
+</nav>
+
+<section id="intro">
+<h2>Introduction</h2>
+<p class="lede">
   I work on <b>vision&ndash;language models</b> and multimodal representation learning, with one question
   running through it: <b>does a model&rsquo;s confidence survive what we do to it?</b> Compression,
   quantization and adaptation all preserve the ranking of predictions while changing the gaps between
@@ -157,20 +181,21 @@ footer{
   diagnosis models with evidential uncertainty, where a single temperature setting once separated a
   near-perfect classifier from a usable one.
   I am applying to master&rsquo;s programs for Spring 2027.
-</div>
+</p>
+</section>
 
-<section>
+<section id="education">
   <h2>Education</h2>
   <div class="entry">
     <div class="erow">
       <h3>Hansung University, Seoul</h3>
-      <span class="date">Mar. 2021 &ndash; Feb. 2027 (expected)</span>
+      <span class="date">Expected Feb. 2027</span>
     </div>
     <p class="sub">B.S. in Industrial and Systems Engineering &middot; Industrial Engineering Track, Big Data Track</p>
   </div>
 </section>
 
-<section>
+<section id="experience">
   <h2>Research Experience</h2>
   <div class="entry">
     <div class="erow">
@@ -192,7 +217,7 @@ footer{
   </div>
 </section>
 
-<section>
+<section id="publications">
   <h2>Publications &amp; Manuscripts</h2>
 
   <div class="pubgroup">
@@ -209,12 +234,12 @@ footer{
     <div class="plabel">Submitted &nbsp;&middot;&nbsp; first author; corresponding author: Prof. S.-H. Choi</div>
     <div class="pub"><span>Label-efficient representation learning for visual recognition &mdash; <span class="venue">Information Fusion</span> (2026)</span></div>
     <div class="pub"><span>Instance-adaptive multimodal fusion for outcome prediction &mdash; <span class="venue">IEEE Transactions on Knowledge and Data Engineering</span> (2026)</span></div>
-    <div class="pub"><span>Cross-domain generalization for visual recognition &mdash; <span class="venue">Engineering Applications of Artificial Intelligence</span> (2026)</span></div>
+    <div class="pub"><span>Generalization to unseen acquisition conditions in visual recognition &mdash; <span class="venue">Engineering Applications of Artificial Intelligence</span> (2026)</span></div>
     <p style="margin:14px 0 0; font-size:13px; color:var(--faint); font-style:italic">Titles withheld at the corresponding author&rsquo;s request while under review.</p>
   </div>
 </section>
 
-<section>
+<section id="research">
   <h2>Research</h2>
 
   <div class="card">
@@ -293,38 +318,28 @@ footer{
   </div>
 </section>
 
-<section>
-  <h2>Research Tooling</h2>
-  <p style="margin:0 0 16px; font-size:14.5px; color:var(--muted)">Built because the research needed them.</p>
-  <ul class="plain">
-    <li><b>Parallel runner</b> &mdash; distributes tasks across GPUs, cutting experiment turnaround roughly fourfold against sequential runs.</li>
-    <li><b>Probe-gated chaining</b> &mdash; a short trial run must pass before the full run starts, so a misconfigured setting no longer costs a long job.</li>
-    <li><b>Result aggregation and status board</b> &mdash; collects scattered run outputs into tables and shows what is currently running at a glance.</li>
-    <li><b>Config logging</b> &mdash; every run records its own configuration, added after a folder with the same name was silently reused under different settings.</li>
-  </ul>
-</section>
 
-<section>
+<section id="skills">
   <h2>Skills</h2>
   <dl class="skills">
-    <dt>Languages &amp; Frameworks</dt>
-    <dd>Python, SQL, C, Java &middot; PyTorch, TensorFlow, scikit-learn, timm</dd>
+    <dt>Programming Languages</dt>
+    <dd>Python, SQL, C, Java</dd>
     <dt>Vision&ndash;Language &amp; Multimodal</dt>
-    <dd>CLIP, DINOv2, Vision Transformers &middot; visual token compression, contrastive representation learning, multimodal fusion, knowledge distillation, prototype-based reasoning</dd>
+    <dd>DINOv2, Vision Transformers &middot; contrastive representation learning, multimodal fusion, knowledge distillation</dd>
     <dt>Reliability &amp; Explainability</dt>
-    <dd>Evidential (Dirichlet) estimation, conformal prediction, calibration (temperature scaling, ECE), OOD detection &middot; Grad-CAM, Score-CAM, LIME</dd>
+    <dd>Evidential (Dirichlet) estimation, conformal prediction, calibration (temperature scaling, ECE), OOD detection &middot; Grad-CAM, LIME</dd>
     <dt>Experiment Design &amp; Statistics</dt>
-    <dd>StratifiedGroupKFold, ablation studies, dependence correction (Nadeau&ndash;Bengio) &middot; McNemar, Wilcoxon, Friedman&ndash;Nemenyi, permutation tests, bootstrap CIs</dd>
+    <dd>StratifiedGroupKFold, ablation studies, dependence correction (Nadeau&ndash;Bengio) &middot; McNemar, Wilcoxon, Friedman&ndash;Nemenyi</dd>
   </dl>
 </section>
 
-<section>
+<section id="awards">
   <h2>Awards, Certifications &amp; Languages</h2>
   <ul class="plain">
     <li>Excellence Award, Hansung University Capstone Design, 2026</li>
     <li>Advanced Data Analytics Semi-Professional (ADsP), Korea Data Agency</li>
     <li>Computer Specialist in Business Level 2, Korea Chamber of Commerce and Industry</li>
-    <li>Korean (native) &middot; English (TOEIC 820)</li>
+    <li>Korean &middot; English (TOEIC 820)</li>
   </ul>
 </section>
 
@@ -332,8 +347,6 @@ footer{
   <span>Jonghwa Park &middot; Seoul, Republic of Korea</span>
   <span>Last updated September 2026</span>
 </footer>
-
 </div>
-
 </body>
 </html>
