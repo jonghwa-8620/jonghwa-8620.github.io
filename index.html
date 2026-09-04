@@ -241,74 +241,49 @@ footer{
 
 <section id="research">
   <h2>Research</h2>
-
+  <p style="margin:0 0 18px; font-size:14px; color:var(--muted)">Method details for manuscripts under review are withheld.</p>
   <div class="card">
     <div class="kind">Prototype reasoning &middot; Evidential uncertainty</div>
     <h3>Interpretable visual diagnosis with calibrated evidence</h3>
-    <p>A classifier whose decision path runs through learned class prototypes, so the evidence for a
-    prediction is structural rather than reconstructed after the fact, paired with a Dirichlet evidential
-    head that reports how much evidence supports each class. Built the full pipeline &mdash; spectral band
-    gating, prototype reasoning layer, evidential head &mdash; and evaluated it across six crops and
-    seventeen disease classes with grouped cross-validation.</p>
-    <p class="learn"><b>What it taught me.</b> One run reached near-perfect accuracy while its confidence
-    was no better calibrated than a coin flip. Working back from the reported accuracy and calibration
-    error put mean confidence near 0.5 &mdash; the model could not be more certain than that about
-    anything. The cause was not the architecture but the temperature mapping prototype similarity to
-    probability: below one, the formula flattened the distribution instead of sharpening it, structurally
-    capping the maximum probability. Correcting a single setting recovered folds that had been stuck at
-    chance. Since then I read the confidence distribution before the accuracy table.</p>
+    <p>A classifier that reasons through learned class prototypes and reports how much evidence
+    supports each class. Built and evaluated end to end with grouped cross-validation.</p>
+    <p class="learn"><b>What it taught me.</b> Accuracy can look normal while the probabilities are
+    meaningless. Since then I read the confidence distribution before the accuracy table.</p>
   </div>
-
   <div class="card">
     <div class="kind">Experiment design &middot; Doubting my own method</div>
     <h3>Ablation as a way to look for my own mistakes</h3>
-    <p>After an earlier manuscript was rejected for methodological overlap, I redesigned the method as four
-    modules &mdash; frequency decoupling, mutual self-distillation, spectral consistency regularization, and
-    an evidential head &mdash; each behind an independent flag, so that ablation was possible by
-    construction rather than as an afterthought.</p>
-    <p>I also traced a failure where the evidential learning signal decayed inversely with the number of
-    classes, so training barely moved past thirty-odd classes. Three candidate fixes were tested
-    separately; only rescaling the signal worked, and the other two did nothing on their own.</p>
-    <p class="learn"><b>What it taught me.</b> Two results were uncomfortable and both changed the paper.
-    Ablation showed regions where removing a module matched or beat the full model. And the claim that my
-    mechanism prevented training collapse looked like it might be an artifact of the early-stopping
-    setting &mdash; so I ran a control varying only that setting, and confirmed it alone could manufacture
-    a &ldquo;collapse.&rdquo; Experiment design is for giving a hypothesis a chance to fail, not for
-    confirming it.</p>
+    <p>I build methods as independent modules behind separate flags, so ablation is possible by
+    construction rather than added as an afterthought.</p>
+    <p class="learn"><b>What it taught me.</b> Experiment design is for giving a hypothesis a chance
+    to fail, not for confirming it.</p>
   </div>
-
   <div class="card">
     <div class="kind">Label efficiency &middot; Uncertainty</div>
     <h3>Learning visual representations with fewer labels</h3>
-    <p>In field diagnosis not every sample can be inspected. This work fuses six evidence sources with
-    different strengths and failure modes, attaches distribution-free guarantees to the fused prediction,
-    and uses those guarantees to decide which samples a human should check first.</p>
+    <p>In field diagnosis not every sample can be inspected. This work attaches guarantees to a
+    prediction and uses them to decide which samples a person should check first.</p>
     <p class="learn"><b>What it taught me.</b> Uncertainty means something only as an input to a decision.
     &ldquo;This prediction is uncertain&rdquo; is not information; &ldquo;inspect this sample first&rdquo;
     is.</p>
   </div>
-
   <div class="card">
-    <div class="kind">Instance-adaptive fusion &middot; Negative result</div>
-    <h3>Measuring what an adaptive fusion layer could add, before building it</h3>
-    <p>Prediction pipelines that draw on several sources often add a layer that decides, per record, which
-    source to trust. Before building that layer, I measured the ceiling on what it could possibly
-    contribute, using an oracle upper bound. The expected gain was not statistically significant, and I
-    reported it as such.</p>
+    <div class="kind">Adaptive fusion &middot; Negative result</div>
+    <h3>Measuring what a component could add, before building it</h3>
+    <p>Before adding an adaptive component to a prediction pipeline, I measured the ceiling on what it
+    could contribute. The expected gain was not statistically significant, and I reported it as such.</p>
     <p class="learn"><b>Why I keep it here.</b> Not claiming an improvement you have not measured is the
     starting point for working on trustworthy models, not an exception to it.</p>
   </div>
-
   <div class="card">
     <div class="kind">Multimodal &middot; Capstone</div>
     <h3>Review helpfulness prediction (PRIS-RHP)</h3>
     <p>Predicting review helpfulness from review text together with reviewer metadata and interaction
     signals, on a large-scale review corpus. Signals that text representations alone missed turned out to
     sit in the metadata. Received the Excellence Award at the Hansung University Capstone Design showcase.</p>
-    <p class="learn"><b>What it taught me.</b> Which signal actually contributes is rarely what intuition
-    says. This is where I first needed an ablation, and it has been standard practice for me since.</p>
+    <p class="learn"><b>What it taught me.</b> Which signal actually contributes is rarely what
+    intuition says.</p>
   </div>
-
   <div class="card">
     <div class="kind">Industry collaboration &middot; Pre-capstone</div>
     <h3>DB Bridge &mdash; natural-language data extraction</h3>
